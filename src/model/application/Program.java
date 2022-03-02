@@ -27,7 +27,7 @@ public class Program {
              list) {
             System.out.println(x);
         }
-
+/*
         System.out.println("INSERINDO ");
         cliente = new Cliente(null, "Ronaldo");
         clienteDao.insert(cliente);
@@ -37,7 +37,7 @@ public class Program {
             System.out.println(x);
         }
         System.out.println("Inserted! New id = "+cliente.getId()); //Isso aqui só dá certo, pois é passagem por referência.
-
+*/
         /*
         System.out.println();
         System.out.println("UPDATE");
@@ -50,7 +50,14 @@ public class Program {
             System.out.println(x);
         }
 */
-
-
+        System.out.println();
+        System.out.println("DELETE");
+        clienteDao.deleteById(1);
+        list = clienteDao.findAll();
+        for (Cliente x:
+                list) {
+            System.out.println(x);
+        }
+        
     }
 }
