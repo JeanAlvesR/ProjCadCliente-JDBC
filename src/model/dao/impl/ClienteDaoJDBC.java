@@ -5,10 +5,7 @@ import db.DbException;
 import model.dao.ClienteDao;
 import model.entities.Cliente;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +19,49 @@ public class ClienteDaoJDBC implements ClienteDao {
 
     @Override
     public void insert(Cliente cliente) {
+        PreparedStatement st = null;
+        try {
+            st = conn.prepareStatement("INSERT INTO clientes (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+            st.setString(1, cliente.getName());
+
+            int rowsAffected = st.executeUpdate();
+
+            if(rowsAffected>0){
+                ResultSet rs = st.getGeneratedKeys();
+                if(rs.next()){
+                    int id = rs.getInt(1);
+                    cliente.setId(id);
+                }
+                DB.closeResultSet(rs);
+            }
+            else {
+                throw new DbException("Unexpected error! No rows affected!");
+            }
+
+        }
+        catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+        }
 
     }
-
     @Override
     public void update(Cliente cliente) {
+        PreparedStatement st = null;
+        try {
+            st = conn.prepareStatement("UPDATE clientes SET Name = ? WHERE Id = ?");
+            st.setString(1, cliente.getName());
+            st.setInt(2, cliente.getId());
+            st.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+        }
 
     }
 
