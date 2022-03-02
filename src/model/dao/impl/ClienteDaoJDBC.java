@@ -43,7 +43,7 @@ public class ClienteDaoJDBC implements ClienteDao {
             st.setInt(1, id);
             rs = st.executeQuery();
             if(rs.next()){
-                String name = rs.getString(2);
+                String name = rs.getString("Name");
                 Cliente cliente = new Cliente();
                 cliente.setId(id);
                 cliente.setName(name);
