@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteDaoJDBC implements ClienteDao {
@@ -62,6 +63,28 @@ public class ClienteDaoJDBC implements ClienteDao {
 
     @Override
     public List<Cliente> findAll() {
-        return null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try{
+            st = conn.prepareStatement("SELECT * from clientes ORDER by Id");
+            rs = st.executeQuery();
+            List<Cliente> list = new ArrayList<>();
+            while(rs.next()){
+                String name = rs.getString("Name");
+                int id = rs.getInt("Id");
+                Cliente cliente = new Cliente();
+                cliente.setId(id);
+                cliente.setName(name);
+                list.add(cliente);
+            }
+            return list;
+        }
+        catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+        finally {
+            DB.closeResultSet(rs);
+            DB.closeStatement(st);
+        }
     }
 }
