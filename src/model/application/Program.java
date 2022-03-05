@@ -58,6 +58,6 @@ public class Program {
                 list) {
             System.out.println(x);
         }
-        
+
     }
 }
